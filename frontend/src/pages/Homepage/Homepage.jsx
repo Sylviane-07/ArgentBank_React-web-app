@@ -3,11 +3,13 @@ import React from 'react'
 import styles from './Homepage.module.css'
 //components
 import Banner from '../../components/Banner/Banner';
+import Features from "../../layouts/Features/Features"
 
 function Homepage() {
     return (
         <>
         <Banner/>
+        <Features/>
         </>
     );
 }

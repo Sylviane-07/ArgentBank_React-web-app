@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 //assets
-import logo from '../../assets/argentBankLogo_webp.webp'
+import logo from '../../assets/argentBankLogo.webp'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 //Styles
