@@ -1,10 +1,8 @@
-import './App.css';
+import Router from "./Router";
 
 function App() {
   return (
-    <div className="App">
-        <p>Learn React.</p>
-    </div>
+    <Router/>
   );
 }
 
