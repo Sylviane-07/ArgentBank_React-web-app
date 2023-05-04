@@ -19,7 +19,7 @@ function NavBar() {
           <h1 className="sr-only">Argent Bank</h1>
         </NavLink>
         <div>
-          <NavLink className={styles.mainNavItem} to="./signin">
+          <NavLink className={styles.mainNavItem} to="/signin">
             <FontAwesomeIcon
               className={styles.userCircleIcon}
               icon={faUserCircle}
