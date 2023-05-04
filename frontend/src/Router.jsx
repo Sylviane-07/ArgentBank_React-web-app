@@ -8,13 +8,13 @@ import {
 //components
 
 //layouts
-import MainLayout from "./layouts/MainLayout"
+import MainLayout from "./layouts/MainLayout/MainLayout"
 
 //pages
-import Homepage from "./pages/Homepage"
-import Login from "./pages/Login"
-import Profile from "./pages/Profile"
-import NotFound from "./pages/NotFound"
+import Homepage from "./pages/Homepage/Homepage"
+import Login from "./pages/Login/Login"
+import Profile from "./pages/Profile/Profile"
+import NotFound from "./pages/NotFound/NotFound"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
