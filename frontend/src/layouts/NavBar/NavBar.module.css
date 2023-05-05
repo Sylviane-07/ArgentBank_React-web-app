@@ -37,3 +37,12 @@
   width: 16px;
   margin-right: 5px;
 }
+
+@media (max-width: 375px) {
+  .mainNav{
+    padding: 5px 5px;
+  }
+  .mainNavLogoImage {
+    width: 180px;
+  }
+}
