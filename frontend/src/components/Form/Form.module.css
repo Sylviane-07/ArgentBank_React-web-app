@@ -39,6 +39,7 @@
 }
 
 .signInBtn{
+  width: 100%;
   display: block;
   padding: 8px;
   font-size: 1.1rem;
