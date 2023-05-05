@@ -21,6 +21,7 @@ function NavBar() {
         <div>
           <NavLink className={styles.mainNavItem} to="/signin">
             <FontAwesomeIcon
+              aria-hidden="true"
               className={styles.userCircleIcon}
               icon={faUserCircle}
             />
