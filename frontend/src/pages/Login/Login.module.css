@@ -1,0 +1,20 @@
+.main {
+  flex: 1;
+}
+
+.bgDark {
+  background-color: #12002b;
+}
+
+.signInContent {
+  box-sizing: border-box;
+  background-color: white;
+  width: 300px;
+  margin: 0 auto;
+  margin-top: 3rem;
+  padding: 2rem;
+}
+
+.signInIcon {
+  font-size: 1rem;
+}

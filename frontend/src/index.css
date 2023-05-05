@@ -8,10 +8,14 @@ html {
 
 body {
   margin: 0;
+}
+
+#root{
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
+
 .sr-only {
   border: 0 !important;
   clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
