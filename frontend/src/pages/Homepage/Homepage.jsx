@@ -3,6 +3,7 @@ import React from 'react'
 
 //components
 import Banner from '../../components/Banner/Banner';
+//layouts
 import Features from "../../layouts/Features/Features"
 
 function Homepage() {
