@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // import { NavLink } from 'react-router-dom';
 //Styles
 import styles from "./Form.module.css";
@@ -6,15 +6,34 @@ import styles from "./Form.module.css";
 import Button from "../../components/Button/Button";
 
 function Form() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  })
+
+  const { email, password } = formData
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+  }
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    console.log(formData)
+  }
+
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <div className={styles.inputWrapper}>
         <label htmlFor="email">Email</label>
-        <input type="email" id="email" />
+        <input type="email" id="email" name="email" value={email} onChange={onChange} required/>
       </div>
       <div className={styles.inputWrapper}>
         <label htmlFor="password">Password</label>
-        <input type="password" id="password" />
+        <input type="password" id="password" name="password" value={password} onChange={onChange} required/>
       </div>
       <div className={styles.inputRemember}>
         <input type="checkbox" id="remember-me" />
