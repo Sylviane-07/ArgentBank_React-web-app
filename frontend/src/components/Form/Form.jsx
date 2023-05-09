@@ -1,48 +1,80 @@
-import React, { useState } from "react";
-// import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 //Styles
 import styles from "./Form.module.css";
 //components
 import Button from "../../components/Button/Button";
+//import RTK Query
+import { useUserLoginMutation } from "../../redux/features/apiSlice";
 
 function Form() {
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-  })
-
-  const { email, password } = formData
+  });
+  const { email, password } = formData;
+  const [userLogin, { isLoading, isSuccess, isError, error }] =
+    useUserLoginMutation();
+  
+  const navigate = useNavigate()
 
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
-    }))
-  }
+    }));
+  };
 
   const onSubmit = (e) => {
-    e.preventDefault()
-    console.log(formData)
-  }
+    e.preventDefault();
+    //Query to set userToken to localStorage
+    userLogin({email, password});
+    //Reset form imputs   
+    setFormData({
+      email: "",
+      password: "",
+    });
+  };
+ 
+  useEffect(() => {
+    //userLogin side effect => navigate to profil if logged-in  
+    if (isSuccess && localStorage.getItem("accessToken")) {
+      navigate("/profile");
+    }
+  }, [isSuccess, navigate]);
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} id="loginForm">
       <div className={styles.inputWrapper}>
         <label htmlFor="email">Email</label>
-        <input type="email" id="email" name="email" value={email} onChange={onChange} required/>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={email}
+          onChange={onChange}
+          required
+        />
       </div>
       <div className={styles.inputWrapper}>
         <label htmlFor="password">Password</label>
-        <input type="password" id="password" name="password" value={password} onChange={onChange} required/>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={onChange}
+          required
+        />
       </div>
       <div className={styles.inputRemember}>
         <input type="checkbox" id="remember-me" />
         <label htmlFor="remember-me">Remember me</label>
       </div>
-      {/* <NavLink to="/profile" className={styles.signInButton}>
-          Sign In
-        </NavLink> */}
-      <Button btnText={"Sign In"} className={styles.signInBtn} />
+      <Button type={"submit"} btnText={"Sign In"} className={styles.signInBtn} />
+      {isLoading && <p>Loading...</p>}
+      {isError && <p>{error?.data?.message}</p>}
     </form>
   );
 }
