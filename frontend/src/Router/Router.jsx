@@ -8,20 +8,24 @@ import {
 //components
 
 //layouts
-import MainLayout from "./layouts/MainLayout/MainLayout"
+import MainLayout from "../layouts/MainLayout/MainLayout";
 
 //pages
-import Homepage from "./pages/Homepage/Homepage"
-import Login from "./pages/Login/Login"
-import Profile from "./pages/Profile/Profile"
-import NotFound from "./pages/NotFound/NotFound"
+import Homepage from "../pages/Homepage/Homepage";
+import Login from "../pages/Login/Login";
+import Profile from "../pages/Profile/Profile";
+import NotFound from "../pages/NotFound/NotFound";
+import ProtectedRoutes from "./ProtectedRoutes";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
       <Route path="/" element={<Homepage />} />
       <Route path="login" element={<Login />} />
-      <Route path="profile" element={<Profile />} />
+        {/* Protected Routes */}
+      <Route element={<ProtectedRoutes />}>
+        <Route path="/profile" element={<Profile />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Route>
   )
