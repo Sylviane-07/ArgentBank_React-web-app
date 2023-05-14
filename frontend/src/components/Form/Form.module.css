@@ -22,6 +22,16 @@
   font-size: 1.2rem;
 }
 
+.isErrorMessage {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.isLoadingMessage {
+  color: #808080;
+  font-weight: bold;
+}
+
 .signInButton {
   /* display: block;
   padding: 8px;

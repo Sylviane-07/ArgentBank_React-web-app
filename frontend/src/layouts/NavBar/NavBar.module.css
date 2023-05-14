@@ -33,9 +33,10 @@
   width: 200px;
 }
 
-.userCircleIcon {
+.navIcon {
   width: 16px;
   margin-right: 5px;
+  margin-left: 5px;
 }
 
 @media (max-width: 375px) {

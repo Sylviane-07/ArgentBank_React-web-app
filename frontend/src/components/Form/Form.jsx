@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 //Styles
 import styles from "./Form.module.css";
 //components
 import Button from "../../components/Button/Button";
 //import RTK Query
-import { useUserLoginMutation } from "../../redux/features/apiSlice";
+import {
+  useUserLoginMutation,
+  useUserProfileMutation,
+} from "../../redux/features/apiSlice";
+import { setIsAuthenticated } from "../../redux/features/authSlice";
 
 function Form() {
   const [formData, setFormData] = useState({
@@ -13,10 +18,28 @@ function Form() {
     password: "",
   });
   const { email, password } = formData;
-  const [userLogin, { data, isLoading, isSuccess, isError, error }] =
-    useUserLoginMutation();
+
+  //Calling hooks from RTK Query
+  const [
+    userLogin,
+    { isLoading: isLoginLoading, isError: isLoginError, error: loginError },
+  ] = useUserLoginMutation({
+    fixedCacheKey: "userLoginToken",
+  });
+  const [
+    userProfile,
+    {
+      isLoading: isProfileLoading,
+      isSuccess: isProfileSuccess,
+      isError: isProfileError,
+      error: profileError,
+    },
+  ] = useUserProfileMutation({
+    fixedCacheKey: "userProfileData",
+  });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -25,30 +48,39 @@ function Form() {
     }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    //Query to set userToken to localStorage
-    userLogin({ email, password });
-    //Reset form imputs
-    setFormData({
-      email: "",
-      password: "",
-    });
+    //Query to get token & set it under userToken in localStorage
+    try {
+      const result = await userLogin({ email, password }).unwrap();
+      if (result) {
+        //Query to get userProfile info with the token
+        try {
+          dispatch(setIsAuthenticated(true));
+          const userToken = JSON.parse(localStorage.getItem("accessToken"));
+          userProfile({ token: userToken });
+        } catch (isProfileError) {
+          // console.log(isProfileError);
+        }
+      }
+    } catch (isLoginError) {
+      // console.log(isLoginError);
+    } finally {
+      //Reset form imputs
+      setFormData({
+        email: "",
+        password: "",
+      });
+    }
   };
 
   useEffect(() => {
-    //userLogin side effect => navigate to profil if logged-in
-    if (isSuccess && localStorage.getItem("accessToken")) {
-      //Checking if stored token is === to response token
-      const userToken = JSON.parse(localStorage.getItem("accessToken"));
-      const responseToken = data?.body?.token;
-      // console.log(responseToken);
-      // console.log(userToken);
-      if (userToken === responseToken) {
-        navigate("/profile");
-      }
+    //userLogin && userProfil fetch side effect => navigate to profil if logged-in
+    if (isProfileSuccess) {
+      // console.log(isProfileSuccess);
+      navigate("/profile");
     }
-  }, [isSuccess, data, navigate]);
+  }, [isProfileSuccess, navigate]);
 
   return (
     <form onSubmit={onSubmit} id="loginForm">
@@ -83,8 +115,20 @@ function Form() {
         btnText={"Sign In"}
         className={styles.signInBtn}
       />
-      {isLoading && <p>Loading...</p>}
-      {isError && <p>{error?.data?.message}</p>}
+      {isLoginLoading ? (
+        <p className={styles.isLoadingMessage}>Loading...</p>
+      ) : (
+        isProfileLoading && (
+          <p className={styles.isLoadingMessage}>Loading...</p>
+        )
+      )}
+      {isLoginError ? (
+        <p className={styles.isErrorMessage}>{loginError?.data?.message}</p>
+      ) : (
+        isProfileError && (
+          <p className={styles.isErrorMessage}>{profileError?.data?.message}</p>
+        )
+      )}
     </form>
   );
 }
