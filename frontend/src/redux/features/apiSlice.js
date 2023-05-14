@@ -20,8 +20,19 @@ export const apiSlice = createApi({
         localStorage.setItem("accessToken", JSON.stringify(responseToken));
         return response;
       },
+      // keepUnusedData: true,
+    }),
+    userProfile: builder.mutation({
+      query: ({ token }) => ({
+        url: "user/profile",
+        method: "POST",
+        headers: {"Authorization": `Bearer ${token}`},
+      }),
+      transformResponse: (response) => {
+        return response.body;
+      },
     }),
   }),
 });
 
-export const { useUserLoginMutation } = apiSlice;
+export const { useUserLoginMutation, useUserProfileMutation } = apiSlice;
