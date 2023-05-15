@@ -1,45 +1,44 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import React from "react";
 //Styles
-import styles from "./UserWelcome.module.css"
+import styles from "./UserWelcome.module.css";
 //components
 import Button from "../../components/Button/Button";
 //import RTK Query
-import {useUserProfileMutation} from "../../redux/features/apiSlice"
-import UserEdit from '../UserEdit/UserEdit';
+import { useUserProfileMutation } from "../../redux/features/apiSlice";
+import { useDispatch } from "react-redux";
+import { setIsUpdateUser } from "../../redux/features/updateUserSlice";
 
 function UserWelcome() {
+  const dispatch = useDispatch();
+  //RTK Query
   const [
+    // eslint-disable-next-line
     userProfile,
-    {
-      data: profileData,
-      isLoading: isProfileLoading,
-      isSuccess: isProfileSuccess,
-      isError: isProfileError,
-      error: profileError,
-    },
+    { data: profileData },
   ] = useUserProfileMutation({
-    fixedCacheKey: "userProfileData"
+    fixedCacheKey: "userProfileData",
   });
-  const userFirstName = profileData?.firstName;
-  const userLastName = profileData?.lastName;
 
-  const navigate = useNavigate()
-  const handleOnClickEdit = () => {
-    console.log("click")
-    navigate("/profile/edit");
-  }
+  //Event Handler
+  //Set UserUpdate to true to display EditUser
+  const handleIsUpdateUser = () => {
+    dispatch(setIsUpdateUser(true));
+  };
 
-    return (
-      <div className={styles.header}>
-        <h1>
-          Welcome back
-          <br />
-          {`${userFirstName} ${userLastName} !`}
-        </h1>
-        <Button btnText={"Edit Name"} className={styles.editBtn} onClick={handleOnClickEdit} />
-      </div>
-    );
+  return (
+    <div className={styles.header}>
+      <h1>
+        Welcome back
+        <br />
+        {`${profileData?.firstName} ${profileData?.lastName} !`}
+      </h1>
+      <Button
+        btnText={"Edit Name"}
+        className={styles.editBtn}
+        onClick={handleIsUpdateUser}
+      />
+    </div>
+  );
 }
 
-export default UserWelcome
+export default UserWelcome;

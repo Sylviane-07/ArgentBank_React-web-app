@@ -15,26 +15,35 @@ import {
   useUserProfileMutation,
 } from "../../redux/features/apiSlice";
 import { setIsAuthenticated } from "../../redux/features/authSlice";
+import { setIsUpdateUser } from "../../redux/features/updateUserSlice";
 //Redux
 import { useDispatch } from "react-redux";
 
 function NavBar() {
+  const dispatch = useDispatch();
+  //RTK Query
+  // eslint-disable-next-line
   const [userProfile, { data: profileData }] = useUserProfileMutation({
     fixedCacheKey: "userProfileData",
   });
 
+  //Event Handlers
   //handleLogOut => remove token and reset queries cached data
-  const dispatch = useDispatch();
-
   const handleLogOut = () => {
     dispatch(apiSlice.util.resetApiState());
     dispatch(setIsAuthenticated(false));
+    dispatch(setIsUpdateUser(false));
     localStorage.removeItem("accessToken");
+  };
+
+  //Set UserUpdate to false to display WelcomeUser
+  const handleOnclick = () => {
+    dispatch(setIsUpdateUser(false));
   };
 
   return (
     <nav className={styles.mainNav}>
-      <NavLink className={styles.mainNavLogo} to="/">
+      <NavLink className={styles.mainNavLogo} to="/" onClick={handleOnclick}>
         <img
           className={styles.mainNavLogoImage}
           src={logo}
