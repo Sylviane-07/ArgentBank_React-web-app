@@ -20,6 +20,15 @@ margin: 40px 5px 0px 5px;
   border: none;
 }
 
+::placeholder {
+    color: #000000;
+    opacity: 1;
+}
+
+.userEditInput:focus::placeholder {
+    color: transparent;
+}
+
 .readOnlyInput{
     background-color: #D3D3D3;
     color: #808080;
