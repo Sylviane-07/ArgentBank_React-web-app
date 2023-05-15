@@ -1,5 +1,4 @@
-// authSlice.js
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isAuthenticated: false,
@@ -18,4 +17,3 @@ const authSlice = createSlice({
 export const { setIsAuthenticated } = authSlice.actions;
 
 export default authSlice.reducer;
-
