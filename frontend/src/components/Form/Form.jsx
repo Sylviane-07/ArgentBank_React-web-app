@@ -100,14 +100,20 @@ function Form() {
         //Query to get userProfile info with the token
         try {
           dispatch(setIsAuthenticated(true));
-          const userToken = JSON.parse(localStorage.getItem("accessToken"));
+          const userToken = JSON.parse(sessionStorage.getItem("accessToken"));
           userProfile({ token: userToken });
         } catch (isProfileError) {
           // console.log(isProfileError);
+          dispatch(setIsAuthenticated(false));
         }
       }
     } catch (isLoginError) {
       // console.log(isLoginError);
+      dispatch(setIsAuthenticated(false));
+      setFormData({
+        email: "",
+        password: "",
+      });
     } finally {
       //Reset form imputs
       setFormData({

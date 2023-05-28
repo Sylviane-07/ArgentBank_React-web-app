@@ -5,28 +5,21 @@ import styles from "./UserEditForm.module.css";
 //components
 import Button from "../Button/Button";
 //RTK Query
-import {
-  useUserProfileMutation,
-  useUserUpdateMutation,
-} from "../../redux/features/apiSlice";
-import { useDispatch } from "react-redux";
+import { useUserUpdateMutation } from "../../redux/features/apiSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsUpdateUser } from "../../redux/features/updateUserSlice";
 
 function UserEditForm() {
   const dispatch = useDispatch();
-  const [userName, setUserName] = useState("");
-  //RTK Query
-  const [
-    // eslint-disable-next-line
-    userProfile,
-    { data: profileData },
-  ] = useUserProfileMutation({
-    fixedCacheKey: "userProfileData",
-  });
+  const [userNameEdit, setUserNameEdit] = useState("");
 
   const [userUpdate] = useUserUpdateMutation({
     fixedCacheKey: "userProfileData",
   });
+
+  const userName = useSelector((state) => state.auth.userName);
+  const firstName = useSelector((state) => state.auth.firstName);
+  const lastName = useSelector((state) => state.auth.lastName);
 
   //Event Handlers
   //Set UserUpdate to false to display WelcomeUser
@@ -37,10 +30,10 @@ function UserEditForm() {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userToken = JSON.parse(localStorage.getItem("accessToken"));
-      if (userName) {
+      const userToken = JSON.parse(sessionStorage.getItem("accessToken"));
+      if (userNameEdit) {
         //Send Query
-        userUpdate({ token: userToken, username: userName });
+        userUpdate({ token: userToken, username: userNameEdit });
         //Display WelcomeUser
         handleCancelUpdate();
       }
@@ -59,8 +52,8 @@ function UserEditForm() {
           className={styles.userEditInput}
           type="text"
           id="username"
-          placeholder={`${profileData?.userName}` || ""}
-          onChange={(e) => setUserName(e.target.value)}
+          placeholder={`${userName}` || ""}
+          onChange={(e) => setUserNameEdit(e.target.value)}
         />
       </div>
       <div className={styles.userEditInputWrapper}>
@@ -72,7 +65,7 @@ function UserEditForm() {
           type="text"
           id="firstname"
           readOnly
-          value={profileData?.firstName || ""}
+          value={firstName || ""}
         />
       </div>
       <div className={styles.userEditInputWrapper}>
@@ -84,7 +77,7 @@ function UserEditForm() {
           type="text"
           id="lastname"
           readOnly
-          value={profileData?.lastName || ""}
+          value={lastName || ""}
         />
       </div>
       <Button btnText={"Save"} className={styles.userEditBtn} />

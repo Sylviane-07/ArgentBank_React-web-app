@@ -10,30 +10,24 @@ import {
 //Styles
 import styles from "./NavBar.module.css";
 //import RTK Query
-import {
-  apiSlice,
-  useUserProfileMutation,
-} from "../../redux/features/apiSlice";
-import { setIsAuthenticated } from "../../redux/features/authSlice";
+import { apiSlice } from "../../redux/features/apiSlice";
 import { setIsUpdateUser } from "../../redux/features/updateUserSlice";
 //Redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { PURGE } from "redux-persist";
 
 function NavBar() {
   const dispatch = useDispatch();
-  //RTK Query
-  // eslint-disable-next-line
-  const [userProfile, { data: profileData }] = useUserProfileMutation({
-    fixedCacheKey: "userProfileData",
-  });
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const userName = useSelector((state) => state.auth.userName);
 
   //Event Handlers
   //handleLogOut => remove token and reset queries cached data
   const handleLogOut = () => {
     dispatch(apiSlice.util.resetApiState());
-    dispatch(setIsAuthenticated(false));
-    dispatch(setIsUpdateUser(false));
-    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("accessToken");
+    dispatch({ type: PURGE, key: "root", result: () => null });
   };
 
   //Set UserUpdate to false to display WelcomeUser
@@ -51,7 +45,7 @@ function NavBar() {
         />
         <h1 className="sr-only">Argent Bank</h1>
       </NavLink>
-      {profileData ? (
+      {isAuthenticated ? (
         <div>
           <NavLink className={styles.mainNavItem} to="/profile">
             <FontAwesomeIcon
@@ -59,7 +53,7 @@ function NavBar() {
               className={styles.navIcon}
               icon={faUserCircle}
             />
-            {profileData?.userName}
+            {userName}
           </NavLink>
           <NavLink className={styles.mainNavItem} to="/" onClick={handleLogOut}>
             <FontAwesomeIcon

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 const initialState = {
   isUpdateUser: false,
@@ -12,8 +13,11 @@ const updateUserSlice = createSlice({
       state.isUpdateUser = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+  },
 });
 
-export const { setIsUpdateUser } = updateUserSlice.actions;
+export const { setIsUpdateUser, purgeIsUpdateUser } = updateUserSlice.actions;
 
 export default updateUserSlice.reducer;

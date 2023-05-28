@@ -3,21 +3,14 @@ import React from "react";
 import styles from "./UserWelcome.module.css";
 //components
 import Button from "../../components/Button/Button";
-//import RTK Query
-import { useUserProfileMutation } from "../../redux/features/apiSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsUpdateUser } from "../../redux/features/updateUserSlice";
 
 function UserWelcome() {
   const dispatch = useDispatch();
-  //RTK Query
-  const [
-    // eslint-disable-next-line
-    userProfile,
-    { data: profileData },
-  ] = useUserProfileMutation({
-    fixedCacheKey: "userProfileData",
-  });
+
+  const firstName = useSelector((state) => state.auth.firstName);
+  const lastName = useSelector((state) => state.auth.lastName);
 
   //Event Handler
   //Set UserUpdate to true to display EditUser
@@ -30,7 +23,7 @@ function UserWelcome() {
       <h1>
         Welcome back
         <br />
-        {`${profileData?.firstName} ${profileData?.lastName} !`}
+        {`${firstName} ${lastName} !`}
       </h1>
       <Button
         btnText={"Edit Name"}
