@@ -1,0 +1,415 @@
+swagger: '2.0'
+info:
+  title: Bank Argent API documentation
+  description: Contains all available API endpoints in this codebase
+  version: '1.0.0'
+  termsOfService: 'http://swagger.io/terms/'
+host: localhost:3001
+basePath: /api/v1
+schemes:
+  - http
+paths:
+  /user/login:
+    post:
+      tags:
+        - User Module
+      summary: Login
+      description: API for Login
+      parameters:
+        - in: body
+          name: body
+          description: Login Payload
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Login Successfully
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/signup:
+    post:
+      tags:
+        - User Module
+      summary: Signup
+      description: API for Signup
+      parameters:
+        - in: body
+          name: body
+          description: Signup Payload
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Signup Successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/profile:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for fetching a user profile
+      #produces:
+       # - application/json
+      responses:
+        '200':
+          description: User profile retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for updating a user profile
+      parameters:
+        - in: body
+          name: body
+          description: Update user profile attributes
+          required: true
+          schema:
+            $ref: '#/definitions/UserProfile'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User profile retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+# ACCOUNTS & TRANSACTIONS API PROPOSITIONS
+  /accounts:
+    post:
+      security:
+        - Bearer: []    
+      tags:
+        - Account Module
+      summary: Get User Accounts List
+      description: Retrieve all user accounts
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Retrieve all user accounts Successfully
+          schema:
+            $ref: '#/definitions/AccountsResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'          
+        '500':
+          $ref: '#/responses/ServerError'
+  /accounts/{accountId}:
+    post:
+      security:
+        - Bearer: []    
+      tags:
+        - Account Module
+      summary: Get User Account by ID And All Its Transactions
+      description: Retrieve a specific account by its ID and all its transactions
+      parameters:
+        - $ref: '#/parameters/AccountParam'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Account retrieved successfully
+          schema:
+            $ref: '#/definitions/AccountResponse'
+        '400':
+          $ref: '#/responses/BadRequest' 
+        '401':
+          $ref: '#/responses/Unauthorized'                     
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/ServerError'
+  /accounts/{accountId}/transactions:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Account Module
+      summary: Get Account Transactions List For Current Month
+      description: Retrieve transactions for a specific account for the current month
+      parameters:
+        - $ref: '#/parameters/AccountParam'
+        - in: query
+          name: month
+          description: Month number to filter transactions (1 for January, 2 for February, etc.)
+          required: true
+          type: integer          
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Account transactions retrieved successfully
+          schema:
+            $ref: '#/definitions/TransactionsResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'  
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/ServerError'  
+  /accounts/{accountId}/transactions/{transactionId}:
+    parameters: # <-- path-level parameters
+      - $ref: '#/parameters/AccountParam'      
+      - in: path
+        name: transactionId
+        description: ID of the transaction to retrieve
+        required: true
+        type: string      
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Account Module
+      summary: Get Account Specific Transaction
+      description: Retrieve specific transaction from an acccount by its ID
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction retrieved successfully
+          schema:
+            $ref: '#/definitions/TransactionResponse'
+        '400':
+          $ref: '#/responses/BadRequest' 
+        '401':
+          $ref: '#/responses/Unauthorized'                     
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/ServerError'        
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Account Module
+      summary: Modify Specific Transaction Details
+      description: Modify specific transaction Type and Note details
+      parameters: # <-- extra parameter (request body) defined at the operation level 
+        - in: body
+          name: note
+          description: Update specific transaction Type and Note details
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateDetails'         
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction's note modified successfully
+          schema:
+            $ref: '#/definitions/TransactionResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'          
+        '404':
+          $ref: '#/responses/NotFound'          
+        '500':
+          $ref: '#/responses/ServerError'
+  /categories:
+    get:
+      tags:
+        - Account Module
+      summary: Get All Transaction Types
+      description: Return all available transaction types
+      produces:
+        - application/json      
+      responses:
+        '200':
+          description: Returns an array of all categories
+          schema:
+            $ref: '#/definitions/TransactionTypes'              
+        '400':
+          $ref: '#/responses/BadRequest'
+        '500':
+          $ref: '#/responses/ServerError'          
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+parameters: # <-- common parameters for different paths
+  AccountParam:
+      in: path
+      name: accountId
+      description: ID of the account to retrieve
+      required: true
+      type: string
+responses:  # <----- Descriptions of common responses
+  BadRequest:
+    description: Bad request
+    schema:
+      $ref: '#/definitions/Error'
+  NotFound:
+    description: The specified resource was not found
+    schema:
+      $ref: '#/definitions/Error'
+  Unauthorized:
+    description: Unauthorized
+    schema:
+      $ref: '#/definitions/Error'
+  ServerError:
+    description: Internal Server Error
+    schema:
+     $ref: '#/definitions/Error'
+definitions:
+  Error:  # <----- Schema for error response body
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    required:
+      - code
+      - message    
+  User:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+      firstName:
+        type: string
+        description: user first name
+      lastName:
+        type: string
+        description: user last name
+      userName:
+        type: string
+        description: user public name
+  Login:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+  ApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          email:
+            type: string
+  LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
+  UserProfile:
+    type: object
+    properties:
+      userName:
+        type: string
+# ACCOUNT MODULE DEFINITIONS
+  AccountsResponse:
+    type: object
+    properties:
+      accounts:
+        type: array
+        items:
+          $ref: '#/definitions/Account'
+  AccountResponse:
+    type: object
+    properties:
+      account:
+        $ref: '#/definitions/Account'
+      transactions:
+        type: array
+        items:
+          $ref: '#/definitions/Transaction'
+  Account:
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      amount:
+        type: string
+      description:
+        type: string        
+  TransactionsResponse:
+    type: object
+    properties:
+      transactions:
+        type: array
+        items:
+          $ref: '#/definitions/Transaction'
+  TransactionResponse:
+    $ref: '#/definitions/Transaction'
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: string
+      date:
+        type: string
+      description:
+        type: string       
+      amount:
+        type: number
+      balance:
+        type: number  
+      category:
+        type: string
+      note:
+        type: string                    
+  UpdateDetails:
+    type: object
+    properties:
+      category:
+        type: string
+      note:
+        type: string
+  TransactionTypes:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string    
