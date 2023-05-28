@@ -1,5 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
+//RTK QUERY SLICE
 import { apiSlice } from "./features/apiSlice";
+// REACT TOOLKIT SLICE
 import authReducer from "./features/authSlice";
 import updateUserReducer from "../redux/features/updateUserSlice";
 import rememberReducer from "../redux/features/rememberUserSlice";
