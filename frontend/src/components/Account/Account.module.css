@@ -47,6 +47,21 @@
   color: #fff;
 }
 
+@media (max-width: 375px) {
+  .accountTitle{
+    font-size: 0.8rem;
+  }
+  .accountAmount{
+    font-size: 2rem;
+  }
+  .accountAmountDescription{
+    font-size: 0.8rem;    
+  }
+  .transactionBtn{
+    font-size: 0.9rem;  
+  }
+}
+
 @media (min-width: 720px) {
   .account {
     flex-direction: row;

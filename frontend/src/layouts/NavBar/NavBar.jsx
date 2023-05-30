@@ -46,7 +46,7 @@ function NavBar() {
         <h1 className="sr-only">Argent Bank</h1>
       </NavLink>
       {isAuthenticated ? (
-        <div>
+        <div className={styles.mainNavItemsWrapper}>
           <NavLink className={styles.mainNavItem} to="/profile">
             <FontAwesomeIcon
               aria-hidden="true"

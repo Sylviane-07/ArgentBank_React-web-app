@@ -47,3 +47,20 @@
     width: 180px;
   }
 }
+
+@media (max-width: 768px) {
+  .mainNav{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    justify-items: stretch;
+  }
+  .mainNavItemsWrapper{
+    display: grid;
+    justify-items: start;
+    justify-content: end;
+    font-size: clamp(0.8125rem, 0.7408rem + 0.4098vw, 0.9375rem);
+  }
+}
