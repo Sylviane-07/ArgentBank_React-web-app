@@ -21,7 +21,6 @@ export const apiSlice = createApi({
         sessionStorage.setItem("accessToken", JSON.stringify(responseToken));
         return response;
       },
-      // keepUnusedData: true,
     }),
     userProfile: builder.mutation({
       query: ({ token }) => ({
@@ -58,9 +57,6 @@ export const apiSlice = createApi({
       async onQueryStarted({ token, username }, { dispatch, queryFulfilled }) {
         try {
           const { data: userUpdate } = await queryFulfilled;
-          // console.log("token", token);
-          // console.log("username", username);
-          // console.log("userUpdate", userUpdate);
           dispatch(
             apiSlice.util.updateQueryData("userProfile", { token }, (draft) => {
               Object.assign(draft, { userName: username });
@@ -73,15 +69,6 @@ export const apiSlice = createApi({
           // console.log(error);
         }
       },
-      // //RTK Query Optimistic Cache Data Uptdate
-      // // onQueryStarted({ token, username }, { dispatch, queryFulfilled }) {
-      // //   const updateResult = dispatch(
-      // //     apiSlice.util.updateQueryData("userProfile", { token }, (draft) => {
-      // //       Object.assign(draft, { userName: username });
-      // //     })
-      // //   );
-      // //   queryFulfilled.catch(updateResult.undo);
-      // // },
     }),
   }),
 });
