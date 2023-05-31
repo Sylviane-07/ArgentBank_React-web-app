@@ -65,7 +65,7 @@ function NavBar() {
           </NavLink>
         </div>
       ) : (
-        <div>
+        <div className={styles.mainNavItemsWrapper}>
           <NavLink className={styles.mainNavItem} to="/login">
             <FontAwesomeIcon
               aria-hidden="true"
